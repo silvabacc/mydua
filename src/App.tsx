@@ -1,10 +1,11 @@
 import "./App.css";
+import { Input } from "./components/input";
 
 function App() {
   return (
-    <div className="min-h-screen flex rounded-md shadow-lg border border-gray-300">
-      <div className="max-w-xl min-w-sm">
-        <div className="text-left bg-black text-white rounded-md px-4 py-2">
+    <div className="min-h-screen max-w-2xl min-w-sm flex rounded-md shadow-lg border border-gray-300">
+      <div className="min-w-sm">
+        <div className="text-left rounded-md px-4 py-2">
           <span className="text-3xl font-bold">MyDua 🕊️</span>
           <h2 className="font-bold">
             Create your own{" "}
@@ -12,12 +13,8 @@ function App() {
             duas
           </h2>
         </div>
-        <div className="p-4">
-          <input
-            type="text"
-            placeholder="Search for a dua..."
-            className="w-full p-2 mb-4 border border-gray-300 rounded"
-          />
+        <div className="p-4 space-y-4">
+          <Input placeholder="Search for a dua..." className="" />
 
           <div className="space-y-2">
             <div className="p-3 border border-gray-200 rounded">
