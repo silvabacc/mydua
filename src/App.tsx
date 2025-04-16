@@ -10,7 +10,7 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen min-w-sm flex px-4 rounded-md shadow-lg border border-gray-300">
+    <div className="h-screen min-w-sm flex px-4 rounded-md shadow-lg border border-gray-300 overflow-auto">
       <div className="min-w-sm">
         <div className="text-left rounded-md py-2">
           <span className="text-3xl font-bold">MyDua 🕊️</span>
@@ -23,7 +23,9 @@ function App() {
         <Tabs defaultValue={tabConfigs[0].value}>
           <TabsList className="flex bg-white justify-start">
             {tabConfigs.map((config) => (
-              <TabsTrigger value={config.value}>{config.label}</TabsTrigger>
+              <TabsTrigger key={config.value} value={config.value}>
+                {config.label}
+              </TabsTrigger>
             ))}
           </TabsList>
           <Separator className="mt-4" />

@@ -3,6 +3,6 @@ export type Dua = {
   arabic: string;
   latin: string;
   translation: string;
-  benefits: string;
+  benefits?: string;
   source: string;
 };

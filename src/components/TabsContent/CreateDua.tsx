@@ -1,26 +1,33 @@
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import duasJson from "../../data/duas.json";
 import { motion } from "framer-motion";
 import { Dua } from "../../types";
+import { Separator } from "../separator";
+import { Button } from "../button";
+import { Input } from "../input";
 
 export default function CreateDua() {
-  const [searchedDuas, setSearchedDuas] = useState<Dua[]>(duasJson as Dua[]);
-  const [duas, setDuas] = useState<Dua[]>([]);
-  const [cards, setCards] = useState(DEFAULT_CARDS);
-
-  console.log(cards);
+  const [duaCards, setDuaCards] = useState<CardType[]>(
+    duasJson.map((dua, index) => ({
+      dua,
+      id: index.toString(),
+      column: "duas",
+    }))
+  );
 
   return (
-    <div className="h-screen w-full ">
-      <div className="flex h-full w-full gap-3">
-        <Column column="duas" cards={cards} setCards={setCards} />
-        <Column column="mydua" cards={cards} setCards={setCards} />
+    <div className="w-full max-w">
+      <div className="flex sticky top-0 space-x-2 py-2 bg-white justify-end">
+        <Input placeholder="Dua name" />
+        <Button>Save dua</Button>
+      </div>
+      <div className="flex w-full gap-3 ">
+        <Column column="duas" cards={duaCards} setCards={setDuaCards} />
+        <Column column="mydua" cards={duaCards} setCards={setDuaCards} />
       </div>
     </div>
   );
 }
-
-const Board = () => {};
 
 type ColumnProps = {
   cards: CardType[];
@@ -129,7 +136,7 @@ const Column = ({ cards, column, setCards }: ColumnProps) => {
   const filteredCards = cards.filter((c) => c.column === column);
 
   return (
-    <div className="w-56 shrink-0">
+    <div className="w-1/2">
       <div
         onDrop={handleDragEnd}
         onDragOver={handleDragOver}
@@ -149,18 +156,22 @@ type CardProps = CardType & {
   handleDragStart: any;
 };
 
-const Card = ({ title, id, column, handleDragStart }: CardProps) => {
+const Card = ({ dua, id, column, handleDragStart }: CardProps) => {
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
       <motion.div
         layout
         layoutId={id}
-        draggable="true"
-        onDragStart={(e) => handleDragStart(e, { title, id, column })}
-        className="cursor-grab rounded p-3 active:cursor-grabbing"
+        draggable
+        onDragStart={(e) => handleDragStart(e, { dua, id, column })}
+        className="cursor-grab border border-neutral-200 rounded p-3 active:cursor-grabbing"
       >
-        <p className="text-sm">{title}</p>
+        <p className="text-sm">{dua.arabic}</p>
+        <Separator className="my-2" />
+        <p className="text-sm">{dua.translation}</p>
+        <Separator className="my-2" />
+        <p className="text-sm text-neutral-500">{dua.source}</p>
       </motion.div>
     </>
   );
@@ -184,15 +195,7 @@ const DropIndicator = ({ beforeId, column }: DropIndicatorProps) => {
 type ColumnType = "duas" | "mydua";
 
 type CardType = {
-  title: string;
+  dua: Dua;
   id: string;
   column: ColumnType;
 };
-
-const DEFAULT_CARDS: CardType[] = [
-  // BACKLOG
-  { title: "Look into render bug in dashboard", id: "1", column: "duas" },
-  { title: "SOX compliance checklist", id: "2", column: "duas" },
-  { title: "[SPIKE] Migrate to Azure", id: "3", column: "mydua" },
-  { title: "Document Notifications service", id: "4", column: "mydua" },
-];
