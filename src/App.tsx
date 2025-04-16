@@ -1,15 +1,16 @@
 import "./App.css";
 import { Separator } from "./components/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/tabs";
+import CreateDua from "./components/TabsContent/CreateDua";
 
 function App() {
   const tabConfigs = [
-    { label: "Create dua", value: "createdua", content: <>Create Dua</> },
+    { label: "Create dua", value: "createdua", content: <CreateDua /> },
     { label: "My dua", value: "mydua", content: <>my dua</> },
   ];
 
   return (
-    <div className="min-h-screen max-w-2xl min-w-sm flex px-4 rounded-md shadow-lg border border-gray-300">
+    <div className="min-h-screen min-w-sm flex px-4 rounded-md shadow-lg border border-gray-300">
       <div className="min-w-sm">
         <div className="text-left rounded-md py-2">
           <span className="text-3xl font-bold">MyDua 🕊️</span>
@@ -32,19 +33,6 @@ function App() {
             </TabsContent>
           ))}
         </Tabs>
-        {/* <div className="p-4 space-y-4">
-          <Input placeholder="Search for a dua..." className="" />
-
-          <div className="space-y-2">
-            <div className="p-3 border border-gray-200 rounded">
-              O Allah, forgive meaaaaO Allah, forgive meaaaaO Allah, forgive
-              meaaaaO Allah, forgive meaaaaO Allah, forgive me
-            </div>
-            <div className="p-3 border border-gray-200 rounded">
-              Guide me to the straight path.
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
