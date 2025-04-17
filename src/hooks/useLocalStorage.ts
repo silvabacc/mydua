@@ -1,9 +1,4 @@
-import { Dua } from "../types";
-
-type DuaLocalStorage = {
-  duaName: string;
-  duas: Dua[];
-};
+import { Dua, SavedDua } from "../types";
 
 export const useLocalStorage = () => {
   const saveDua = (duaName: string, duas: Dua[]) => {
@@ -18,7 +13,7 @@ export const useLocalStorage = () => {
   const getSavedDua = () => {
     const duas = localStorage.getItem("duas");
     if (duas) {
-      return JSON.parse(duas) as DuaLocalStorage[];
+      return JSON.parse(duas) as SavedDua[];
     }
 
     return [];

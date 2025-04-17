@@ -8,7 +8,10 @@ import { Input } from "../input";
 import { Alert, AlertDescription } from "../alert";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 
-export default function CreateDua() {
+type CreateDuaProps = {
+  onSave: () => void;
+};
+export default function CreateDua({ onSave }: CreateDuaProps) {
   const { saveDua } = useLocalStorage();
   const [duaCards, setDuaCards] = useState<CardType[]>([]);
   const [duaName, setDuaName] = useState("");
@@ -24,7 +27,7 @@ export default function CreateDua() {
     setDuaCards(duas);
   }, []);
 
-  const onSave = () => {
+  const onSaveDua = () => {
     if (!duaName) {
       setError("Please name your dua");
       return;
@@ -38,6 +41,7 @@ export default function CreateDua() {
       .filter((dua) => dua.column === "mydua")
       .map((dua) => dua.dua);
     saveDua(duaName, selectedDuas);
+    onSave();
   };
 
   const onChange = (v: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,11 +50,11 @@ export default function CreateDua() {
   };
 
   return (
-    <div className="w-full max-w">
+    <div className="max-w">
       <div className="sticky top-0  bg-white justify-end">
         <div className="flex space-x-2 py-2">
           <Input value={duaName} onChange={onChange} placeholder="Dua name" />
-          <Button onClick={onSave}>Save dua</Button>
+          <Button onClick={onSaveDua}>Save dua</Button>
         </div>
         {error && (
           <Alert className="border rounded-sm border-red-500">

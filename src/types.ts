@@ -6,3 +6,8 @@ export type Dua = {
   translation: string;
   source: string;
 };
+
+export type SavedDua = {
+  duaName: string;
+  duas: Dua[];
+};
