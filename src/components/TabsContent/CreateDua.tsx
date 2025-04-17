@@ -1,25 +1,64 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import duasJson from "../../data/duas.json";
 import { motion } from "framer-motion";
 import { Dua } from "../../types";
 import { Separator } from "../separator";
 import { Button } from "../button";
 import { Input } from "../input";
+import { Alert, AlertDescription } from "../alert";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 export default function CreateDua() {
-  const [duaCards, setDuaCards] = useState<CardType[]>(
-    duasJson.map((dua, index) => ({
+  const { saveDua } = useLocalStorage();
+  const [duaCards, setDuaCards] = useState<CardType[]>([]);
+  const [duaName, setDuaName] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const duas = duasJson.map((dua) => ({
       dua,
-      id: index.toString(),
-      column: "duas",
-    }))
-  );
+      id: dua.id,
+      column: "duas" as ColumnType,
+    }));
+
+    setDuaCards(duas);
+  }, []);
+
+  const onSave = () => {
+    if (!duaName) {
+      setError("Please name your dua");
+      return;
+    }
+    if (duaCards.filter((dua) => dua.column === "mydua").length === 0) {
+      setError("You haven't selected any duas");
+      return;
+    }
+
+    const selectedDuas = duaCards
+      .filter((dua) => dua.column === "mydua")
+      .map((dua) => dua.dua);
+    saveDua(duaName, selectedDuas);
+  };
+
+  const onChange = (v: React.ChangeEvent<HTMLInputElement>) => {
+    setDuaName(v.currentTarget.value);
+    setError("");
+  };
 
   return (
     <div className="w-full max-w">
-      <div className="flex sticky top-0 space-x-2 py-2 bg-white justify-end">
-        <Input placeholder="Dua name" />
-        <Button>Save dua</Button>
+      <div className="sticky top-0  bg-white justify-end">
+        <div className="flex space-x-2 py-2">
+          <Input value={duaName} onChange={onChange} placeholder="Dua name" />
+          <Button onClick={onSave}>Save dua</Button>
+        </div>
+        {error && (
+          <Alert className="border rounded-sm border-red-500">
+            <AlertDescription className="text-red-500">
+              {error}
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
       <div className="flex w-full gap-3 ">
         <Column column="duas" cards={duaCards} setCards={setDuaCards} />
