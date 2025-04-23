@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { SavedDua } from "../../types";
-import { Card, CardContent, CardHeader, CardTitle } from "../card";
+import { Card } from "antd";
 
 const MyDuas = () => {
   const { getSavedDua } = useLocalStorage();
@@ -18,18 +18,13 @@ const MyDuas = () => {
   return (
     <div className="space-y-2">
       {cards.map((card, index) => (
-        <Card key={`${card.duaName}-${index}`}>
-          <CardHeader>
-            <CardTitle>{card.duaName}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {card.duas.map((dua, index) => (
-              <div key={index}>
-                <p>{dua.arabic}</p>
-                <p>{dua.translation}</p>
-              </div>
-            ))}
-          </CardContent>
+        <Card title={card.duaName} key={`${card.duaName}-${index}`}>
+          {card.duas.map((dua, index) => (
+            <div key={index}>
+              <p>{dua.arabic}</p>
+              <p>{dua.translation}</p>
+            </div>
+          ))}
         </Card>
       ))}
     </div>

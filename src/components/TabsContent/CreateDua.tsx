@@ -2,16 +2,10 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import duasJson from "../../data/duas.json";
 import { motion } from "framer-motion";
 import { Dua } from "../../types";
-import { Separator } from "../separator";
-import { Button } from "../button";
-import { Input } from "../input";
-import { Alert, AlertDescription } from "../alert";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { Alert, Button, Card, Divider, Input } from "antd";
 
-type CreateDuaProps = {
-  onSave: () => void;
-};
-export default function CreateDua({ onSave }: CreateDuaProps) {
+export default function CreateDua() {
   const { saveDua } = useLocalStorage();
   const [duaCards, setDuaCards] = useState<CardType[]>([]);
   const [duaName, setDuaName] = useState("");
@@ -41,7 +35,6 @@ export default function CreateDua({ onSave }: CreateDuaProps) {
       .filter((dua) => dua.column === "mydua")
       .map((dua) => dua.dua);
     saveDua(duaName, selectedDuas);
-    onSave();
   };
 
   const onChange = (v: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,11 +50,11 @@ export default function CreateDua({ onSave }: CreateDuaProps) {
           <Button onClick={onSaveDua}>Save dua</Button>
         </div>
         {error && (
-          <Alert className="border rounded-sm border-red-500">
-            <AlertDescription className="text-red-500">
-              {error}
-            </AlertDescription>
-          </Alert>
+          <Alert
+            type="error"
+            className="border rounded-sm border-red-500"
+            message={error}
+          />
         )}
       </div>
       <div className="flex w-full gap-3 ">
@@ -187,7 +180,9 @@ const Column = ({ cards, column, setCards }: ColumnProps) => {
         className={`h-full w-full transition-colors `}
       >
         {filteredCards.map((c) => {
-          return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
+          return (
+            <MotionCard key={c.id} {...c} handleDragStart={handleDragStart} />
+          );
         })}
         <DropIndicator beforeId={null} column={column} />
       </div>
@@ -199,7 +194,7 @@ type CardProps = CardType & {
   handleDragStart: any;
 };
 
-const Card = ({ dua, id, column, handleDragStart }: CardProps) => {
+const MotionCard = ({ dua, id, column, handleDragStart }: CardProps) => {
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
@@ -208,13 +203,14 @@ const Card = ({ dua, id, column, handleDragStart }: CardProps) => {
         layoutId={id}
         draggable
         onDragStart={(e) => handleDragStart(e, { dua, id, column })}
-        className="cursor-grab border border-neutral-200 rounded p-3 active:cursor-grabbing"
+        className="cursor-grab active:cursor-grabbing"
       >
-        <p className="text-sm">{dua.arabic}</p>
-        <Separator className="my-2" />
-        <p className="text-sm">{dua.translation}</p>
-        <Separator className="my-2" />
-        <p className="text-sm text-neutral-500">{dua.source}</p>
+        <Card title={dua.title}>
+          <p className="text-sm">{dua.arabic}</p>
+          <p className="text-sm">{dua.translation}</p>
+          <Divider className="my-2" />
+          <p className="text-sm text-neutral-500">{dua.source}</p>
+        </Card>
       </motion.div>
     </>
   );

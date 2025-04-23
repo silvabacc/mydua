@@ -1,26 +1,21 @@
-import { useState } from "react";
 import "./App.css";
-import { Separator } from "./components/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/tabs";
 import CreateDua from "./components/TabsContent/CreateDua";
 import MyDuas from "./components/TabsContent/MyDuas";
+import { Tabs } from "antd";
+import type { TabsProps } from "antd";
 
 function App() {
-  const [tab, setTab] = useState<string>();
-
-  const tabConfigs = [
+  const tabConfigs: TabsProps["items"] = [
     {
+      key: "createdua",
       label: "Create dua",
-      value: "createdua",
-      onClick: () => setTab("createdua"),
-      content: <CreateDua onSave={() => setTab("mydua")} />,
+      children: <CreateDua />,
     },
 
     {
-      label: "My dua",
-      value: "mydua",
-      content: <MyDuas />,
-      onClick: () => setTab("mydua"),
+      key: "mydua",
+      label: "My duas",
+      children: <MyDuas />,
     },
   ];
 
@@ -35,29 +30,7 @@ function App() {
             duas
           </h2>
         </div>
-        <Tabs value={tab} defaultValue={tabConfigs[0].value}>
-          <TabsList className="flex bg-white justify-start">
-            {tabConfigs.map((config) => (
-              <TabsTrigger
-                key={config.value}
-                value={config.value}
-                onClick={config.onClick}
-              >
-                {config.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          <Separator className="mt-4" />
-          {tabConfigs.map((config) => (
-            <TabsContent
-              className="max-w"
-              key={config.value}
-              value={config.value}
-            >
-              {config.content}
-            </TabsContent>
-          ))}
-        </Tabs>
+        <Tabs items={tabConfigs} />
       </div>
     </div>
   );
